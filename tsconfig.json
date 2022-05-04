@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "allowJs": false,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "downlevelIteration": true,
+    "declaration": true,
+    "lib": [
+      "es2016",
+      "es2016.array.include",
+      "dom"
+    ],
+    "module": "commonjs",
+    "target": "es5",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*", "src/___types/*"]
+    },
+    "typeRoots": ["node_modules/@types", "src/___types"],
+    "outDir": "./build"
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "src/__tests__"]
+}

@@ -1,0 +1,51 @@
+{
+  "name": "@deltareporter/delta-playwright-plugin",
+  "version": "1.0.0",
+  "description": "Plugin to integrate Playwright with Delta Reporter.",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rimraf ./build",
+    "lint": "eslint \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "axios-retry": "^3.2.5"
+  },
+  "files": [
+    "/build"
+  ],
+  "devDependencies": {
+    "@playwright/test": "^1.17.1",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^15.14.1",
+    "@typescript-eslint/eslint-plugin": "^4.29.3",
+    "@typescript-eslint/parser": "^4.29.3",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-airbnb-typescript": "^14.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.1",
+    "jest": "^27.4.7",
+    "prettier": "^2.5.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.1.2",
+    "typescript": "^4.5.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delta-reporter/delta-reporter-playwright.git"
+  },
+  "author": "Juan Negrier <juannegrier@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/delta-reporter/delta-reporter-playwright/issues"
+  },
+  "homepage": "https://github.com/delta-reporter/delta-reporter-playwright#readme",
+  "engines": {
+    "node": ">= 10.0.0"
+  }
+}
