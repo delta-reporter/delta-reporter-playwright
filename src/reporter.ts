@@ -126,10 +126,22 @@ export class DeltaReporter implements Reporter {
     } catch {
       let test_run_promise = this.promises.pop()
 
-      test_run_promise.then((response) => {
-        fs.writeFileSync(path.resolve('./.delta_service/testRun.json'), JSON.stringify(response));
-        create_suite(response.id)
-      })
+      if(test_run_promise == undefined){
+        const timerId = setInterval(() => {
+          const isExists = fs.existsSync('./.delta_service/testRun.json', 'utf8')
+          if(isExists) {
+            let file = JSON.parse(fs.readFileSync('./.delta_service/testRun.json'));
+            create_suite(file.id)
+
+            clearInterval(timerId)
+          }
+        }, 100)
+      } else {
+        test_run_promise.then((response) => {
+          fs.writeFileSync(path.resolve('./.delta_service/testRun.json'), JSON.stringify(response));
+          create_suite(response.id)
+        })
+      }
     }
   }
 
@@ -191,7 +203,7 @@ export class DeltaReporter implements Reporter {
           update_test(file.test_history_id, result.status, trace, error_message)
           clearInterval(timerId)
         }
-      }, 1000)
+      }, 100)
     } catch (exception) {
       console.warn("Unexpected error:")
       console.error(exception)
