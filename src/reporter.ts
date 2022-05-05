@@ -148,7 +148,7 @@ export class DeltaReporter implements Reporter {
         }
       }
 
-      if(status = "Passed"){
+      if(status == "Passed"){
         console.log(`\n${test.parent.project().name} - ${test.parent.title}
                     - ${test.title}: ${status}`)
       } else {
