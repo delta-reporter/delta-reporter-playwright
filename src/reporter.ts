@@ -43,7 +43,7 @@ export class DeltaReporter implements Reporter {
     let test_run_payload = (launchId: string) => {
       return {
         test_type: this.config.testType,
-        environment: "Visual Regression Tests",
+        environment: suite.title,
         launch_id: launchId,
         start_datetime: new Date()
       }
@@ -72,14 +72,6 @@ export class DeltaReporter implements Reporter {
       promise = this.requests.createTestRun(test_run_payload(launchId));
       this.promises.push(promise)
     }
-  }
-
-  createSuites(test: TestCase): string {
-    console.warn("#### createSuites ####")
-
-    const projectName = test.parent.project().name;
-
-    return projectName;
   }
 
   onTestBegin(test: TestCase): void {
@@ -153,6 +145,12 @@ export class DeltaReporter implements Reporter {
         }
       }
 
+      console.log(`${test.parent.project().name} - ${test.parent.title}
+                    - ${test.title}: ${status}
+
+                  ${error_message ? error_message : null}
+                  ${error_trace ? error_trace : null}`)
+
       let test_history = {
         test_history_id: test_history_id,
         end_datetime: new Date(),
@@ -164,7 +162,7 @@ export class DeltaReporter implements Reporter {
         retries: test.retries
       };
       this.requests.updateTestHistory(test_history).then((reponse: any) => {
-        console.info(reponse);
+        console.debug(reponse);
       })
     }
     try {
@@ -176,19 +174,17 @@ export class DeltaReporter implements Reporter {
 
       update_test(file.test_history_id, result.status, trace, error_message)
     } catch (exception) {
-      console.warn("#### Something weird happened ####")
+      console.warn("Unexpected error:")
       console.error(exception)
     }
   }
 
   async onEnd(result: any): Promise<void> {
-    console.warn("#### onEnd ####")
     if (!this.config.enabled) return;
-    console.warn(result);
 
     fs.readdir("./.delta_service/suites", (err: any, files: []) => {
       if (err)
-        console.log(err);
+        console.warn(err);
       else {
         files.forEach(file => {
           if (path.extname(file) == ".json") {
@@ -233,11 +229,11 @@ export class DeltaReporter implements Reporter {
       test_run_status: status
     };
     response = await this.requests.updateTestRun(test_run);
-    console.info(response);
+    console.debug(response);
 
     if (launch) {
       response = await this.requests.finishLaunch({ launch_id: launch.id });
-      console.info(response);
+      console.debug(response);
     }
   }
 }
