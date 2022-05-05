@@ -7,6 +7,8 @@ import {
 const rimraf = require('rimraf');
 const fs = require('fs');
 const DeltaRequests = require('./requests');
+const util = require('util');
+const debuglog = util.debuglog('delta');
 import path from 'path';
 
 interface DeltaReporterConfig {
@@ -145,11 +147,16 @@ export class DeltaReporter implements Reporter {
         }
       }
 
-      console.log(`${test.parent.project().name} - ${test.parent.title}
+      if(status = "Passed"){
+        console.log(`\n${test.parent.project().name} - ${test.parent.title}
+                    - ${test.title}: ${status}`)
+      } else {
+        console.log(`\n${test.parent.project().name} - ${test.parent.title}
                     - ${test.title}: ${status}
 
-                  ${error_message ? error_message : null}
-                  ${error_trace ? error_trace : null}`)
+                  ${error_message ? error_message : ""}
+                  ${error_trace ? error_trace : ""}`)
+      }
 
       let test_history = {
         test_history_id: test_history_id,
@@ -162,7 +169,7 @@ export class DeltaReporter implements Reporter {
         retries: test.retries
       };
       this.requests.updateTestHistory(test_history).then((reponse: any) => {
-        console.debug(reponse);
+        debuglog(reponse);
       })
     }
     try {
@@ -229,11 +236,11 @@ export class DeltaReporter implements Reporter {
       test_run_status: status
     };
     response = await this.requests.updateTestRun(test_run);
-    console.debug(response);
+    debuglog(response);
 
     if (launch) {
       response = await this.requests.finishLaunch({ launch_id: launch.id });
-      console.debug(response);
+      debuglog(response);
     }
   }
 }
