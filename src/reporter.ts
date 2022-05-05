@@ -9,6 +9,7 @@ const fs = require('fs');
 const DeltaRequests = require('./requests');
 const util = require('util');
 const debuglog = util.debuglog('delta');
+const debugtestslog = util.debuglog('delta:tests');
 import path from 'path';
 
 interface DeltaReporterConfig {
@@ -158,6 +159,11 @@ export class DeltaReporter implements Reporter {
                   ${error_trace ? error_trace : ""}`)
       }
 
+      debugtestslog("TEST:");
+      debugtestslog(test);
+      debugtestslog("TEST RESULT");
+      debugtestslog(result);
+
       let test_history = {
         test_history_id: test_history_id,
         end_datetime: new Date(),
@@ -215,6 +221,9 @@ export class DeltaReporter implements Reporter {
 
     let status;
 
+    debuglog("LAUNCH RESULT:");
+    debuglog(result);
+
     switch (result.status) {
       case "skipped":
       case "timedOut": {
@@ -241,12 +250,10 @@ export class DeltaReporter implements Reporter {
       end_datetime: new Date(),
       test_run_status: status
     };
-    response = await this.requests.updateTestRun(test_run);
-    debuglog(response);
+    await this.requests.updateTestRun(test_run);
 
     if (launch) {
-      response = await this.requests.finishLaunch({ launch_id: launch.id });
-      debuglog(response);
+      await this.requests.finishLaunch({ launch_id: launch.id });
     }
   }
 }
