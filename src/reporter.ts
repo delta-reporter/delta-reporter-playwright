@@ -173,13 +173,19 @@ export class DeltaReporter implements Reporter {
       })
     }
     try {
-      let test_name = `${test.parent.project().name.replace(/ /g, "_")}-${test.parent.title.replace(/ /g, "_")}-${test.title.replace(/ /g, "_")}`
-      let file = JSON.parse(fs.readFileSync('./.delta_service/<test>.json'.replace("<test>", test_name)));
+      let test_name = `${test.parent.project().name.replace(/ /g, "_")}-${test.parent.title.replace(/ /g, "_")}-${test.title.replace(/ /g, "_")}`;
+      let path = './.delta_service/<test>.json'.replace("<test>", test_name);
+      const timerId = setInterval(() => {
+        const isExists = fs.existsSync(path, 'utf8')
+        if(isExists) {
+          let file = JSON.parse(fs.readFileSync(path));
+          let trace = result.error ? result.error.stack : null;
+          let error_message = result.error ? result.error.message : null
 
-      let trace = result.error ? result.error.stack : null;
-      let error_message = result.error ? result.error.message : null
-
-      update_test(file.test_history_id, result.status, trace, error_message)
+          update_test(file.test_history_id, result.status, trace, error_message)
+          clearInterval(timerId)
+        }
+      }, 1000)
     } catch (exception) {
       console.warn("Unexpected error:")
       console.error(exception)
