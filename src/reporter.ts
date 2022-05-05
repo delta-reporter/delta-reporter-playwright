@@ -201,7 +201,7 @@ export class DeltaReporter implements Reporter {
               test_suite_history_id: suite.test_suite_history_id,
               end_datetime: new Date()
             };
-            this.requests.updateSuiteHistory(test_suite_history).then((response: any) => { console.log(response) })
+            this.requests.updateSuiteHistory(test_suite_history).then((response: any) => { debuglog(response) })
           }
         })
       }

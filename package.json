@@ -1,6 +1,6 @@
 {
   "name": "@delta-reporter/delta-playwright-plugin",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Plugin to integrate Playwright with Delta Reporter.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
